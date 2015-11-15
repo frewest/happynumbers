@@ -1,0 +1,47 @@
+<project name="se.fwestling.project" default="dist">
+	<description>
+	Simple implementation of number sequence generator that will print the sequence to the console 
+	</description>
+
+	<property name="src" location="${basedir}/src" />
+	<property name="build" location="${basedir}/build" />
+	<property name="lib" location="${basedir}/lib" />
+	<property name="dist" location="${basedir}/dist" />
+	<property name="jar.file" value="${ant.project.name}.numbergenerator" />
+	<property name="main-class" value="se.fwestling.project.main.Main" />
+
+	<path id="project.class.path">
+		<fileset dir="${basedir}/lib" includes="*.jar" />
+		<pathelement path="${java.class.path}/" />
+	</path>
+
+	<target name="dist" depends="compile" description="Build the JAR file">
+		<jar destfile="${dist}/${jar.file}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="${build}">
+			</fileset>
+			<fileset dir="${src}" includes="*.xml"></fileset>
+			<zipgroupfileset dir="${lib}" includes="*.jar"/>
+		</jar>
+	</target>
+
+	<target name="compile" depends="init" description="Compiles the code">
+		<javac includeAntRuntime="false" srcdir="${src}" destdir="${build}" optimize="true" debug="true">
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+</project>
